@@ -1,0 +1,48 @@
+.site-top-banner-container {
+    display: flex;
+    position: relative;
+    top: 85px;
+    justify-content: center;
+    width: 100%;
+    background: #03A9F4;
+    align-items: center;
+    justify-content: center;
+    padding: 5px;
+}
+.banner-text-block {
+    display: flex;
+    flex-flow: row;
+    color: #fff;
+}
+.site-extra-text{
+    font-size: 20px;
+    font-weight: bold;
+    color: #fff;
+}
+.light-banner-text{
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 20px;
+}
+.promo-code{
+    font-weight: bold;
+    font-size: 20px;
+    color: #fff;
+    margin-left: 10px;
+}
+.banner-text-block div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 16px;
+}   
+
+@media only screen and (min-width: 220px) and (max-width: 768px) {
+    .banner-text-block div, .promo-code, .light-banner-text{
+        font-size: 12px;
+    }
+    .banner-text-block {
+        flex-flow: wrap;
+        justify-content: center;
+    }
+}

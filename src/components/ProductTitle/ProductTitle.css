@@ -1,0 +1,13 @@
+.product-details .product-name {
+    font-family: sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #0277bd;
+    text-decoration: none;
+    min-height: 37px;
+    max-height: 38px;
+    overflow: hidden;
+    display: block;
+    width: 100%;
+    line-height: 18px;
+  }

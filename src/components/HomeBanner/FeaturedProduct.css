@@ -1,0 +1,149 @@
+.featured-all-prod {
+  display: flex;
+  padding: 0;
+  margin-top: 10px;
+}
+
+.featured-all-prod button {
+  width: 120px;
+  text-transform: uppercase;
+  background: #344687;
+  color: #fff;
+  padding: 10px;
+  letter-spacing: .1rem;
+  display: inline-block;
+  font-weight: 500;
+  transition: all .3s linear;
+  font-size: .875rem;
+  cursor: pointer;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, .2);
+  border-radius: 0.25rem;
+  border-color: transparent;
+  text-decoration: none;
+}
+
+.featured-btn:hover {
+  color: #f1f1f1;
+  background: #4a64c3;
+}
+
+.featured-text {
+  display: flex;
+  justify-content: center;
+  margin: 40px 0 20px 0;
+}
+
+.featured-text h2 {
+  text-transform: capitalize;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+.featured-prod-container {
+  display: flex;
+  flex-flow: row;
+  justify-content: center;
+}
+
+.featured-image {
+  position: relative;
+  width: 250px;
+  height: 250px;
+}
+
+.featured-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.featured-title-price {
+  padding: 10px;
+}
+
+.featured-title,
+.featured-price {
+  font-size: 14px;
+  font-weight: bold;
+  font-family: sans-serif;
+}
+
+.quick_view {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #344687;
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  -webkit-box-pack: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  transition: max-height 0.5s ease;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.featured-image:hover {
+  z-index: 9;
+}
+
+.featured-image img:hover {
+  opacity: 0.5;
+}
+
+.featured-image:hover .quick_view {
+  opacity: 1;
+}
+
+.featured-all-prod {
+  display: flex;
+  justify-content: center;
+}
+
+.featured-all-prod button {
+  width: 200px;
+}
+
+.featured-btn a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.featured-container {
+  display: flex;
+  flex-flow: column;
+  margin-bottom: 30px;
+}
+
+.featured-container .product_details_btn.view-more {
+  display: none;
+}
+.featured-prod-list {
+  display: flex;
+  width: 100%;
+}
+@media only screen and (min-width: 220px) and (max-width: 568px) {
+  .featured-prod-container {
+    display: flex;
+    overflow: hidden;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  .featured-prod-list {
+    overflow-y: scroll;
+    display: flex;
+  }
+  /* .featured-prod-container .product-card{
+    width: 80%;
+  } */
+}
+@media only screen and (min-width: 1024px) and (max-width: 1720px) {
+  .featured-prod-list {
+    justify-content: center;
+  }
+}
