@@ -1,37 +1,68 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ProductsArray } from "../../data/DataType";
 import "./QuantityInput.css"
+import { useCartContext } from "../../context/CartContext";
 
 const QuantityInput:React.FC<{product:ProductsArray}> = ({product}) => {
-    product.quantity = 1;
+    if(!product.quantity){
+        product.quantity = 1;  
+    }
     const [count, setCount] = useState(product)
-
+    const { cart, totalPrice, clearCart, deleteFromCart,increaseQuantity,  decreaseQuantity,  setTotalPrice, getQuantity} = useCartContext();
     const handleIncrementQuantity = () =>{
         setCount((prev) => {
-            const prevQuantity = prev.quantity ?? 0;
+            const newQuantity = (prev.quantity ?? 0) + 1;
+            const newTotalPrice = newQuantity * product.price;
             return {
                 ...prev,
-                quantity: prevQuantity + 1
-            }
-        })
+                quantity: newQuantity,
+                totalProductPrice: newTotalPrice
+            };
+        });
+        if(window.location.pathname.includes('/cart')){
+            increaseQuantity(count)
+        }
     }
     const handleDecrementQuantity = () =>{
+        if(count.quantity == 0 || count.quantity == 1){
+            return;
+        }
         setCount((prev) => {
-            const prevQuantity = prev.quantity ?? 0;
+            const newQuantity = (prev.quantity ?? 0) - 1;
+            const newTotalPrice = newQuantity * product.price;
             return {
                 ...prev,
-                quantity: prevQuantity - 1
-            }
-        })
+                quantity: newQuantity,
+                totalPrice: newTotalPrice
+            };
+        });
+        if(window.location.pathname.includes('/cart')){
+            decreaseQuantity(count)
+        }
     }
     const handleOnChangeQty = (e: React.ChangeEvent<HTMLInputElement>) => {
-        let qtyValue = e.target.value;
+        let qtyValue = e.target.value || "1";
         if (qtyValue === "" || qtyValue === undefined) {
             qtyValue = "1";
         }
         const newValue = parseInt(qtyValue);
-        setCount((prevCount) => ({ ...prevCount, quantity: newValue }));
+        setCount((prev) => {
+            const newQuantity = newValue;
+            const newTotalPrice = newQuantity * product.price;
+            
+            return {
+                ...prev,
+                quantity: newQuantity,
+                totalPrice: newTotalPrice
+            };
+        });
+        if(window.location.pathname.includes('/cart')){
+            getQuantity(count,newValue)
+        }
+        // setCount((prevCount) => ({ ...prevCount, quantity: newValue }));
+        
     };
+    
     return (
         <>
             <label>Quantity : </label>

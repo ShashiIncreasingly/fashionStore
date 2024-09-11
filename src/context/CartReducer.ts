@@ -1,5 +1,6 @@
 import { ICart, ProductsArray } from "../data/DataType";
 interface IAction {
+  qty: any | number | undefined;
   type: string;
   payload: any;
 }
@@ -28,6 +29,23 @@ const cartReducer = (state: ICart, action: IAction) => {
           }
           return item;
         }),
+      };
+    case 'GET_COUNT':
+      return {
+        ...state,
+        products: state.products.map((item) => {
+          if (item.id === action.payload) {
+            return { ...item, quantity: action.qty };
+          }
+          return item;
+        }),
+        // ...state,
+        // products: state.products.map((item) => {
+        //   if (item.id === action.payload) {
+        //     return { ...item, quantity: (action.qty) };
+        //   }
+        //   return item;
+        // }),
       };
     case 'SET_TOTAL_PRICE':
       return { ...state, totalPrice: action.payload };

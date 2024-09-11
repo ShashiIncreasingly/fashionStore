@@ -1,4 +1,4 @@
-import React, { createContext, Reducer, useContext, useEffect, useReducer } from 'react';
+import React, { createContext, Reducer, useContext, useEffect, useReducer, useState } from 'react';
 import useLocalStorage from '../hook/useLocalStorage';
 import { ICart, ProductsArray } from '../data/DataType';
 import cartReducer from './CartReducer';
@@ -20,7 +20,6 @@ const CartContextProvider: React.FC<IProps> = ({ children }) => {
   const [state, dispath] = useReducer<Reducer<ICart, any>>(cartReducer, initialState);
   const { getStorage, setStorage } = useLocalStorage();
   const cartStorageData = getStorage('SHOP_CART');
-  console.log('state.products - ', state.products.length)
   if (cartStorageData && !state.products.length) {
     setStorage('SHOP_CART', cartStorageData);
     state.products = cartStorageData
@@ -28,6 +27,7 @@ const CartContextProvider: React.FC<IProps> = ({ children }) => {
   const addToCart = (productData: ProductsArray, quantity: number = 1): void => {
     const { products } = state;
     // add count to the new product and set it to 1 as default
+    
     if (products.find((product) => product.id === productData.id)) {
       const product: ProductsArray | undefined = products.find((product) => product.id === productData.id);
       if(product?.quantity){
@@ -62,7 +62,19 @@ const CartContextProvider: React.FC<IProps> = ({ children }) => {
       return productItem;
     });
     setStorage('SHOP_CART', newProducts);
-};
+  };
+
+  const getQuantity = (item: ProductsArray, quantity:number): void => {
+    console.log("getquantity",quantity)
+    dispath({ type: 'GET_COUNT', payload: item.id, qty : quantity});
+    const newProducts = state.products.map((productItem) => {
+      if (productItem.id === item.id) {
+        return { ...productItem, quantity: quantity };
+      }
+      return productItem;
+    });
+    setStorage('SHOP_CART', newProducts);
+  };
 
   const decreaseQuantity = (item: ProductsArray): void => {
     dispath({ type: 'DECRESE_COUNT', payload: item.id });
@@ -86,19 +98,21 @@ const CartContextProvider: React.FC<IProps> = ({ children }) => {
     dispath({ type: 'SET_TOTAL_PRICE', payload: price });
   };
   useEffect(() => {
-    const localCopon = getStorage('DISCOUNT_COPON');
-    let totalPrice: any = state.products
-      .reduce((prev, item) => (prev += (item.price - (item.price * (item.discountPercent ?? 0)) / 100) * (item.quantity ?? 0)), 0)
-      .toFixed(2);
-    if (localCopon.percent > 0) {
-      for (const cop in coponData) {
-        if (cop === localCopon.text) {
-          const discount: any = ((totalPrice * localCopon.percent) / 100).toFixed(2);
-          totalPrice = (+totalPrice - +discount).toFixed(2);
+    if(state.products.length != 0){
+      const localCopon = getStorage('DISCOUNT_COPON');
+      let totalPrice: any = state.products
+        .reduce((prev, item) => (prev += (item.price - (item.price * (item.discountPercent ?? 0)) / 100) * (item.quantity ?? 0)), 0)
+        .toFixed(2);
+      if (localCopon.percent > 0) {
+        for (const cop in coponData) {
+          if (cop === localCopon.text) {
+            const discount: any = ((totalPrice * localCopon.percent) / 100).toFixed(2);
+            totalPrice = (+totalPrice - +discount).toFixed(2);
+          }
         }
       }
+      setTotalPrice(totalPrice);
     }
-    setTotalPrice(totalPrice);
   }, [state.products]);
 
   return (
@@ -113,6 +127,7 @@ const CartContextProvider: React.FC<IProps> = ({ children }) => {
         increaseQuantity,
         decreaseQuantity,
         setTotalPrice,
+        getQuantity
       }}
     >
       {children}
@@ -123,13 +138,14 @@ const CartContextProvider: React.FC<IProps> = ({ children }) => {
 interface IReducer {
   cart: ProductsArray[];
   totalPrice: number;
-  dispath: ({ type, payload }: { type: string; payload: any }) => void;
+  dispath: ({ type, payload }: { type: string; payload: any;qty?:number }) => void;
   addToCart: (productData: ProductsArray, quantity: number) => void;
   deleteFromCart: (item: ProductsArray) => void;
   increaseQuantity: (item: ProductsArray) => void;
   decreaseQuantity: (item: ProductsArray) => void;
   setTotalPrice: (price: number) => void;
   clearCart: () => void;
+  getQuantity : (item: ProductsArray, quantity:number) => void;
 }
 const useCartContext = (): IReducer => useContext(CartContext);
 
